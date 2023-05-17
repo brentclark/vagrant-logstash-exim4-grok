@@ -1,0 +1,22 @@
+---
+- name: Ensure apt cache is up to date.
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+    upgrade: dist
+    force_apt_get: true
+
+- name: Install packages
+  ansible.builtin.apt:
+    pkg:
+      - apt-transport-https
+      - bash-completion
+      - ca-certificates
+      - curl
+      - dnsutils
+      - git
+      - gnupg
+      - lsb-release
+      - unattended-upgrades
+      - vim
+      - wget

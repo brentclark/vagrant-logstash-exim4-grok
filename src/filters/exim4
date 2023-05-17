@@ -1,0 +1,48 @@
+input {
+  stdin {}
+  #file {
+  #  path           => ["/home/vagrant/src/eximlog/*"]
+  #  start_position => "beginning"
+  #}
+}
+filter {
+  if "exim4" in [tags] {
+    multiline {
+      patterns_dir => "/home/vagrant/src/patterns/"
+      pattern      => "%{EXIM_DATE} %{EXIM_MSGID:msgid}"
+      what         => "previous"
+    }
+
+    grok {
+      patterns_dir   => "/home/vagrant/src/patterns/"
+      break_on_match => false
+      match          => [ "message", "^%{EXIM_SPAM}" ]
+    }
+
+    grok {
+      patterns_dir   => "/home/vagrant/src/patterns/"
+      break_on_match => false
+      match          => [ "message", "^%{EXIM_LEFT}" ]
+    }
+
+    grok {
+      patterns_dir   => "/home/vagrant/src/patterns/"
+      break_on_match => false
+      match          => [ "message", "^%{EXIM_RIGHT}" ]
+    }
+    grok {
+      patterns_dir   => "/home/vagrant/src/patterns/"
+      break_on_match => false
+      match          => [ "message", "^%{EXIM_SPAM_CHECK_ST}" ]
+    }
+  }
+}
+
+output {
+  file {
+    path => "/tmp/%{type}.%{{yyyy.MM.dd.HH}}"
+  }
+  stdout { codec => rubydebug }
+}
+
+
