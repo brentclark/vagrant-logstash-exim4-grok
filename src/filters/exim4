@@ -6,7 +6,6 @@ input {
   #}
 }
 filter {
-  if "exim4" in [tags] {
     multiline {
       patterns_dir => "/home/vagrant/src/patterns/"
       pattern      => "%{EXIM_DATE} %{EXIM_MSGID:msgid}"
@@ -35,7 +34,6 @@ filter {
       break_on_match => false
       match          => [ "message", "^%{EXIM_SPAM_CHECK_ST}" ]
     }
-  }
 }
 
 output {
